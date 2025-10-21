@@ -1,110 +1,101 @@
-#!/usr/bin/env python3
+# Blowing_Smoke_pkg/generate_fake_data.py
 import sys
+import os
 import csv
 import json
-import random
-from faker import Faker
+
+# Try importing Faker with user-friendly prompt
+try:
+    from faker import Faker
+except ImportError:
+    print("\n⚠️ Jesse built this with Faker, it's legit … don't make it weird.")
+    print("   Please install Faker: pip install Faker\n")
+    sys.exit(1)
 
 fake = Faker()
 
-# --- Admin / Employee data ---
-def generate_admin(num_rows, output_file):
-    fields = ["name", "address", "phone", "email"]
-    data = [
-        {
-            "name": fake.name(),
-            "address": fake.address().replace("\n", ", "),
-            "phone": fake.phone_number(),
-            "email": fake.email(),
-        }
-        for _ in range(num_rows)
-    ]
-    write_output(data, fields, output_file)
+def generate_admin():
+    """Generate fake admin/employee data"""
+    return {
+        "name": fake.name(),
+        "address": fake.address().replace("\n", ", "),
+        "phone": fake.phone_number(),
+        "email": fake.email()
+    }
 
-# --- Performance data ---
-def generate_performance(num_rows, output_file):
-    fields = ["employee_name", "job_title", "performance_score", "salary", "hire_date"]
-    data = [
-        {
-            "employee_name": fake.name(),
-            "job_title": fake.job(),
-            "performance_score": random.randint(1, 10),
-            "salary": round(random.uniform(40000, 120000), 2),
-            "hire_date": str(fake.date_between(start_date='-5y', end_date='today'))
-        }
-        for _ in range(num_rows)
-    ]
-    write_output(data, fields, output_file)
+def generate_performance():
+    """Generate fake performance data"""
+    return {
+        "score": round(fake.random.uniform(1, 5), 2),
+        "review": fake.sentence(),
+        "bonus": round(fake.random.uniform(0, 10000), 2)
+    }
 
-# --- Character trait data ---
-def generate_character(num_rows, output_file):
-    traits = ["Leadership", "Teamwork", "Creativity", "Dependability", "Integrity"]
-    fields = ["employee_name"] + traits
-    data = []
-    for _ in range(num_rows):
-        entry = {"employee_name": fake.name()}
-        entry.update({t: random.randint(1, 5) for t in traits})
-        data.append(entry)
-    write_output(data, fields, output_file)
+def generate_character():
+    """Generate fake character trait data"""
+    return {
+        "trait": fake.word(),
+        "strength": fake.random_element(elements=("low","medium","high")),
+        "note": fake.sentence()
+    }
 
-# --- Helper: write CSV, JSON, or SQL ---
-def write_output(data, fields, output_file):
-    if output_file.endswith(".csv"):
-        with open(output_file, "w", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=fields)
-            writer.writeheader()
-            writer.writerows(data)
-    elif output_file.endswith(".json"):
-        with open(output_file, "w") as f:
-            json.dump(data, f, indent=4)
-    elif output_file.endswith(".sql"):
-        table = output_file.split("/")[-1].replace(".sql", "")
-        with open(output_file, "w") as f:
-            for row in data:
-                cols = ", ".join(row.keys())
-                vals = ", ".join([f"'{str(v).replace('\'','\'\'')}'" for v in row.values()])
-                f.write(f"INSERT INTO {table} ({cols}) VALUES ({vals});\n")
-    else:
-        print(f"Unsupported output type for {output_file}. Use .csv, .json, or .sql")
+def save_csv(data, output_file):
+    with open(output_file, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=data[0].keys())
+        writer.writeheader()
+        writer.writerows(data)
+
+def save_json(data, output_file):
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+
+def save_sql(data, output_file):
+    table_name = "fake_data"
+    with open(output_file, "w", encoding="utf-8") as f:
+        for row in data:
+            columns = ", ".join(row.keys())
+            # Fixed SQL escaping issue
+            vals = ", ".join([f"'{str(v).replace(\"'\",\"''\")}'" for v in row.values()])
+            f.write(f"INSERT INTO {table_name} ({columns}) VALUES ({vals});\n")
+
+CATEGORY_GENERATORS = {
+    "admin": generate_admin,
+    "performance": generate_performance,
+    "character": generate_character
+}
+
+SAVE_FUNCTIONS = {
+    ".csv": save_csv,
+    ".json": save_json,
+    ".sql": save_sql
+}
 
 def main():
     if len(sys.argv) != 4:
-        print("Usage: generate_fake_data.py [admin|performance|character] [output_file] [num_rows]")
+        print("Usage: fake_data <category> <output_file> <num_rows>")
+        print("Categories: admin, performance, character")
         sys.exit(1)
 
-    category, output_file, num_rows = sys.argv[1], sys.argv[2], int(sys.argv[3])
-
-    if category == "admin":
-        generate_admin(num_rows, output_file)
-    elif category == "performance":
-        generate_performance(num_rows, output_file)
-    elif category == "character":
-        generate_character(num_rows, output_file)
-    else:
-        print(f"Unknown category: {category}")
+    category = sys.argv[1].lower()
+    output_file = sys.argv[2]
+    try:
+        num_rows = int(sys.argv[3])
+    except ValueError:
+        print("Error: num_rows must be an integer")
         sys.exit(1)
 
-    print(f"✅ Generated {num_rows} rows of {category} data → {output_file}")
-
-def main():
-    import sys
-    # (existing code from generate_fake_data.py)
-    if len(sys.argv) != 4:
-        print("Usage: fake_data [admin|performance|character] [output_file] [num_rows]")
+    if category not in CATEGORY_GENERATORS:
+        print(f"Error: Invalid category '{category}'")
         sys.exit(1)
 
-    category, output_file, num_rows = sys.argv[1], sys.argv[2], int(sys.argv[3])
+    data = [CATEGORY_GENERATORS[category]() for _ in range(num_rows)]
 
-    if category == "admin":
-        generate_admin(num_rows, output_file)
-    elif category == "performance":
-        generate_performance(num_rows, output_file)
-    elif category == "character":
-        generate_character(num_rows, output_file)
-    else:
-        print(f"Unknown category: {category}")
+    ext = os.path.splitext(output_file)[1].lower()
+    if ext not in SAVE_FUNCTIONS:
+        print(f"Error: Unsupported file extension '{ext}'")
         sys.exit(1)
 
+    SAVE_FUNCTIONS[ext](data, output_file)
     print(f"✅ Generated {num_rows} rows of {category} data → {output_file}")
 
 if __name__ == "__main__":
