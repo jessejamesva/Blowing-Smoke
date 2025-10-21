@@ -10,7 +10,7 @@ Fake employee, performance, and character trait data generator.
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/Blowing_Smoke.git
+git clone https://github.com/jessejamesva/Blowing_Smoke.git
 cd Blowing_Smoke
 python3 -m venv venv
 source venv/bin/activate
