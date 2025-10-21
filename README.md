@@ -26,20 +26,22 @@ Blowing_Smoke is a CLI tool to generate fake employee data, performance data, an
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/jessejamesva/Blowing_Smoke.git
-cd Blowing_Smoke
+*command to install git with dnf
+git clone https://github.com/jessejamesva/Blowing-Smoke.git
+cd Blowing-Smoke
 ```
 
 2. Create a virtual environment:
 
 ```bash
-python3 -m venv ~/venv_blowsmoke
-source ~/venv_blowsmoke/bin/activate
+python3 -m venv ~/venv
+source ~/venv/bin/activate
 ```
 
 3. Install the package in editable mode:
 
 ```bash
+python3 -m upgrade pip
 pip install -e .
 ```
 
@@ -47,6 +49,12 @@ pip install -e .
 
 ```bash
 chmod +x scripts/fake_data.sh
+```
+
+5. Install Faker
+
+```bash
+pip install faker
 ```
 
 ---
