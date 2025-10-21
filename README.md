@@ -2,8 +2,7 @@
 
 ## Description
 
-Blowing_Smoke is a CLI tool to generate fake employee data, performance data, and character traits using the Python Faker library.  
-It supports CSV, JSON, and SQL outputs, and is designed for quick testing, development, or demo purposes.
+Blowing_Smoke is a CLI tool to generate fake employee data, performance data, and character traits using the Python Faker library. It supports CSV, JSON, and SQL outputs, and is designed for quick testing, development, or demo purposes. I am working on my DevOps skill's and attempted to build a tool to potentialy make my life a little easier, tomorrow. If I am giong to be moving lots of data in my quest to gain DevOps skills then I certainly don't want to get lost in the weeds.
 
 ---
 
@@ -27,7 +26,7 @@ It supports CSV, JSON, and SQL outputs, and is designed for quick testing, devel
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/<your_username>/Blowing_Smoke.git
+git clone https://github.com/jessejamesva/Blowing_Smoke.git
 cd Blowing_Smoke
 ```
 
@@ -44,7 +43,7 @@ source ~/venv_blowsmoke/bin/activate
 pip install -e .
 ```
 
-4. (Optional) Make the Bash wrapper executable:
+4. Make the Bash wrapper executable:
 
 ```bash
 chmod +x scripts/fake_data.sh
@@ -149,6 +148,8 @@ Please install Faker: pip install Faker
 - The CLI automatically creates output directories if they do not exist.
 - Default number of rows is 10 if not specified.
 - `all` category adds a `"category"` field in combined output to distinguish types.
+
+- Jesse's Closing Thoughts - I'm getting better at estimating the time to completion, over-estimated myself by a factor of 2 during planning. But, I accomplished pretty much all the stretch goals so haters, you know what to do. | I have a firmer grip on the computer file structure, and not in a way that I understand it better - but instead, in a way where I can picture in my mind easier. Traversing and building out the tree felt natural. Just a note | Thank you for coming to my TedTalk and reading all the way down here.... | "Always be the duck!"
 
 ---
 
