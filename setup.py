@@ -2,10 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name="Blowing_Smoke",
-    version="0.1.1",
+    version="0.2.0",
     packages=find_packages(),
     install_requires=[
-        "Faker>=23.0.0"
+         #"Faker>=23.0.0"
+         # Faker is optional; user see instal comment
     ],
     entry_points={
         "console_scripts": [

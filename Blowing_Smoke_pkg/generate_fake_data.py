@@ -1,8 +1,8 @@
-# Blowing_Smoke_pkg/generate_fake_data.py
 import sys
 import os
 import csv
 import json
+from datetime import datetime
 
 # Try importing Faker
 try:
@@ -15,7 +15,6 @@ except ImportError:
 fake = Faker()
 
 def generate_admin():
-    """Generate fake admin/employee data"""
     return {
         "name": fake.name(),
         "address": fake.address().replace("\n", ", "),
@@ -24,7 +23,6 @@ def generate_admin():
     }
 
 def generate_performance():
-    """Generate fake performance data"""
     return {
         "score": round(fake.random.uniform(1, 5), 2),
         "review": fake.sentence(),
@@ -32,12 +30,23 @@ def generate_performance():
     }
 
 def generate_character():
-    """Generate fake character trait data"""
     return {
         "trait": fake.word(),
         "strength": fake.random_element(elements=("low","medium","high")),
         "note": fake.sentence()
     }
+
+CATEGORY_GENERATORS = {
+    "admin": generate_admin,
+    "performance": generate_performance,
+    "character": generate_character
+}
+
+SAVE_FUNCTIONS = {
+    ".csv": "csv",
+    ".json": "json",
+    ".sql": "sql"
+}
 
 def save_csv(data, output_file):
     with open(output_file, "w", newline="", encoding="utf-8") as f:
@@ -50,12 +59,10 @@ def save_json(data, output_file):
         json.dump(data, f, indent=4)
 
 def save_sql(data, output_file):
-    """Save data as SQL INSERT statements, safe escaping"""
     table_name = "fake_data"
     with open(output_file, "w", encoding="utf-8") as f:
         for row in data:
             columns = ", ".join(row.keys())
-            # Safely escape single quotes using temporary variable
             vals_list = []
             for v in row.values():
                 safe_val = str(v).replace("'", "''")
@@ -63,44 +70,68 @@ def save_sql(data, output_file):
             vals = ", ".join(vals_list)
             f.write(f"INSERT INTO {table_name} ({columns}) VALUES ({vals});\n")
 
-CATEGORY_GENERATORS = {
-    "admin": generate_admin,
-    "performance": generate_performance,
-    "character": generate_character
-}
-
-SAVE_FUNCTIONS = {
-    ".csv": save_csv,
-    ".json": save_json,
-    ".sql": save_sql
-}
-
 def main():
-    if len(sys.argv) != 4:
-        print("Usage: fake_data <category> <output_file> <num_rows>")
-        print("Categories: admin, performance, character")
+    # Help flag
+    if len(sys.argv) == 2 and sys.argv[1] in ("-h", "--help"):
+        print("""
+Usage: fake_data <category> <output_file> [num_rows]
+
+Categories:
+  admin        Generate employee admin data (name, address, phone, email)
+  performance  Generate performance data (score, review, bonus)
+  character    Generate character traits (trait, strength, note)
+  all          Generate all three categories into one file
+
+Supported output files: .csv, .json, .sql
+
+Examples:
+  fake_data admin data/employees.csv 10
+  fake_data all data/fake_all.json 5
+""")
+        sys.exit(0)
+
+    if len(sys.argv) < 3:
+        print("Error: Not enough arguments. Use --help for usage info.")
         sys.exit(1)
 
     category = sys.argv[1].lower()
     output_file = sys.argv[2]
-    try:
-        num_rows = int(sys.argv[3])
-    except ValueError:
-        print("Error: num_rows must be an integer")
-        sys.exit(1)
+    num_rows = int(sys.argv[3]) if len(sys.argv) > 3 else 10  # default 10 rows
 
-    if category not in CATEGORY_GENERATORS:
-        print(f"Error: Invalid category '{category}'")
-        sys.exit(1)
+    # Ensure output folder exists
+    folder = os.path.dirname(output_file) or "data"
+    os.makedirs(folder, exist_ok=True)
 
-    data = [CATEGORY_GENERATORS[category]() for _ in range(num_rows)]
+    # Determine categories to generate
+    if category == "all":
+        categories = ["admin", "performance", "character"]
+    elif category in CATEGORY_GENERATORS:
+        categories = [category]
+    else:
+        print(f"Error: Invalid category '{category}'. Use --help for options.")
+        sys.exit(1)
 
     ext = os.path.splitext(output_file)[1].lower()
     if ext not in SAVE_FUNCTIONS:
         print(f"Error: Unsupported file extension '{ext}'")
         sys.exit(1)
 
-    SAVE_FUNCTIONS[ext](data, output_file)
+    combined_data = []
+    for cat in categories:
+        cat_data = [CATEGORY_GENERATORS[cat]() for _ in range(num_rows)]
+        if category == "all":
+            for i, row in enumerate(cat_data):
+                row["category"] = cat  # mark category if combining
+        combined_data.extend(cat_data)
+
+    # Save file
+    if ext == ".csv":
+        save_csv(combined_data, output_file)
+    elif ext == ".json":
+        save_json(combined_data, output_file)
+    elif ext == ".sql":
+        save_sql(combined_data, output_file)
+
     print(f"✅ Generated {num_rows} rows of {category} data → {output_file}")
 
 if __name__ == "__main__":
