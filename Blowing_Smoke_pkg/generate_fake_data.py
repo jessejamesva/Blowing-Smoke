@@ -1,3 +1,19 @@
+## This python script can be used for data generation. Built by JesseV2025
+
+# Usage: fake_data <category> <output_file> [num_rows]
+
+#    Categories:
+#       admin        Generate employee admin data (name, address, phone, email)
+#       performance  Generate performance data (score, review, bonus)
+#       character    Generate character traits (trait, strength, note)
+#       all          Generate all three categories into one file
+
+#    Supported output files: .csv, .json, .sql
+
+#   Examples:
+#       fake_data admin data/employees.csv 10
+#       fake_data all data/fake_all.json 5
+
 import sys
 import os
 import csv
