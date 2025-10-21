@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Crystal Johnson",
+        "address": "Unit 4169 Box 3034, DPO AP 21558",
+        "phone": "273-562-2456",
+        "email": "hlee@example.org"
+    },
+    {
+        "name": "Susan Simon",
+        "address": "241 Darren Causeway, Williamsshire, AK 92647",
+        "phone": "001-276-584-2924",
+        "email": "hannah83@example.org"
+    },
+    {
+        "name": "April King",
+        "address": "93939 Lee Meadow, Angelaberg, AS 38410",
+        "phone": "+1-823-705-8718",
+        "email": "allendanny@example.com"
+    },
+    {
+        "name": "Lance Monroe",
+        "address": "00419 Lewis Mountains, New Vincentville, SC 87705",
+        "phone": "001-287-608-6434x910",
+        "email": "martinezangela@example.com"
+    },
+    {
+        "name": "Katelyn Weber",
+        "address": "44990 Robert Port, West Nicholas, MP 48508",
+        "phone": "849-239-3444",
+        "email": "michael12@example.com"
+    },
+    {
+        "name": "Elizabeth Black",
+        "address": "814 Brady Path, East David, MD 20021",
+        "phone": "713-640-2216",
+        "email": "jrice@example.org"
+    },
+    {
+        "name": "Craig Lester",
+        "address": "256 Armstrong Trail Suite 530, Frankburgh, MO 52640",
+        "phone": "923.411.4309",
+        "email": "scarter@example.com"
+    },
+    {
+        "name": "Tanya Taylor",
+        "address": "118 Sullivan Vista, Josephhaven, NE 76809",
+        "phone": "231.921.3162",
+        "email": "carloswilliams@example.com"
+    },
+    {
+        "name": "Janet Murphy",
+        "address": "5775 Jacobs Path, Aaronstad, NJ 26352",
+        "phone": "001-708-596-3892",
+        "email": "lisa33@example.org"
+    },
+    {
+        "name": "Vincent Mitchell",
+        "address": "1818 Porter Walk, Port Frankhaven, TN 53047",
+        "phone": "+1-470-759-0614x861",
+        "email": "nkelley@example.net"
+    }
+]

@@ -1,0 +1,37 @@
+[
+    {
+        "employee_name": "Melissa Kline",
+        "job_title": "Outdoor activities/education manager",
+        "performance_score": 7,
+        "salary": 57631.12,
+        "hire_date": "2025-04-28"
+    },
+    {
+        "employee_name": "Tammy Hunt",
+        "job_title": "Conservation officer, nature",
+        "performance_score": 9,
+        "salary": 56081.39,
+        "hire_date": "2021-06-12"
+    },
+    {
+        "employee_name": "Crystal Brown",
+        "job_title": "Immunologist",
+        "performance_score": 1,
+        "salary": 56783.13,
+        "hire_date": "2024-10-05"
+    },
+    {
+        "employee_name": "Marie Baker",
+        "job_title": "Museum/gallery exhibitions officer",
+        "performance_score": 4,
+        "salary": 105409.67,
+        "hire_date": "2024-10-02"
+    },
+    {
+        "employee_name": "Aaron Moore",
+        "job_title": "Herbalist",
+        "performance_score": 7,
+        "salary": 66028.37,
+        "hire_date": "2022-11-08"
+    }
+]
