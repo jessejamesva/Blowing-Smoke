@@ -4,7 +4,7 @@ import os
 import csv
 import json
 
-# Try importing Faker with user-friendly prompt
+# Try importing Faker
 try:
     from faker import Faker
 except ImportError:
@@ -50,12 +50,17 @@ def save_json(data, output_file):
         json.dump(data, f, indent=4)
 
 def save_sql(data, output_file):
+    """Save data as SQL INSERT statements, safe escaping"""
     table_name = "fake_data"
     with open(output_file, "w", encoding="utf-8") as f:
         for row in data:
             columns = ", ".join(row.keys())
-            # Fixed SQL escaping issue
-            vals = ", ".join([f"'{str(v).replace(\"'\",\"''\")}'" for v in row.values()])
+            # Safely escape single quotes using temporary variable
+            vals_list = []
+            for v in row.values():
+                safe_val = str(v).replace("'", "''")
+                vals_list.append(f"'{safe_val}'")
+            vals = ", ".join(vals_list)
             f.write(f"INSERT INTO {table_name} ({columns}) VALUES ({vals});\n")
 
 CATEGORY_GENERATORS = {
